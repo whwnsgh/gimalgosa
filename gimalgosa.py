@@ -18,7 +18,7 @@ den = [1, 1+K]
 #극점과 영점 찾기
 zeros, poles, _ = signal.tf2zpk(num, den)
 #극점과 영점 그래프 그리기
-plt.figure()
+fig= st.pyplot()
 plt.scatter(np.real(poles), np.imag(poles), marker='x', color='red',label='Poles')
 plt.scatter(np.real(zeros), np.imag(zeros), marker='o', color='blue',label='Zeros')
 plt.xlabel('Real Axis')
@@ -27,4 +27,4 @@ plt.title('Poles and Zeros of H(s) = K/s+K+1')
 plt.legend()
 plt.grid()
 #그래프 출력
-plt.show()
+plt.figure(fig)
