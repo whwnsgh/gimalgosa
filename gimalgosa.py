@@ -27,4 +27,4 @@ plt.title('Poles and Zeros of H(s) = K/s+K+1')
 plt.legend()
 plt.grid()
 #그래프 출력
-st.pyplot(fig)
+st.pyplot("fig")
