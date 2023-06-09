@@ -13,3 +13,4 @@ print(G3)
 # 극점 출력
 poles = ct.pole(G3)
 print("극점: ", poles)
+st.hello
