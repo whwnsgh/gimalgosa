@@ -1,54 +1,55 @@
-import control
 import numpy as np
+from scipy import signal
 import matplotlib.pyplot as plt
 import streamlit as st
 
-def plot_step_response(system):
-    t, y = control.step_response(system)
-    plt.plot(t, y)
-    plt.xlabel('Time')
-    plt.ylabel('Output')
-    plt.title('Step Response')
-    plt.grid()
+# 폐루프 전달함수 계수
+num_coeffs = [100]
+denom_coeffs = [1, 5, 6]
 
-def plot_bode(system):
-    mag, phase, omega = control.bode(system, Plot=False)
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6))
-    ax1.semilogx(omega, mag)
-    ax1.set_xlabel('Frequency [rad/s]')
-    ax1.set_ylabel('Magnitude [dB]')
-    ax1.set_title('Bode Plot - Magnitude')
-    ax1.grid()
-    ax2.semilogx(omega, phase)
-    ax2.set_xlabel('Frequency [rad/s]')
-    ax2.set_ylabel('Phase [degrees]')
-    ax2.set_title('Bode Plot - Phase')
-    ax2.grid()
-    plt.subplots_adjust(hspace=0.4)
+# 폐루프 전달함수 생성
+sys = signal.TransferFunction(num_coeffs, denom_coeffs)
 
-# 전달함수 G(s) 정의
-num = [100]
-den = [1, 2, 3]
-G = control.TransferFunction(num, den)
+# 시간 범위
+t = np.linspace(0, 10, 1000)
 
-# 폐루프 전달함수 구하기
-G_closed_loop = control.feedback(G)
+# Unit step 입력 신호 생성
+u = np.heaviside(t, 1)
 
-# Streamlit 앱 구성
-st.title('Control System Analysis')
+# 시스템 응답 계산
+t, y, _ = signal.lsim(sys, u, t)
+
+# 주파수 응답 계산
+w, mag, phase = signal.bode(sys)
+
+# Streamlit 앱
+st.title("폐루프 전달함수 시뮬레이션")
 
 # 폐루프 전달함수 출력
-st.header('Closed-loop Transfer Function')
-st.latex(r'G_{\text{closed-loop}}(s) = \frac{100}{{s^2 + 5s + 6}}')
+st.title("폐루프 전달함수")
+st.latex("G(s) = \\frac{100}{{s^2 + 5s + 6}}")
 
-# 단위계단입력의 응답곡선 출력
-st.header('Step Response')
-fig_step = plt.figure()
-plot_step_response(G_closed_loop)
-st.pyplot(fig_step)
+# Unit step 입력의 응답곡선 그리기
+fig1, ax1 = plt.subplots()
+ax1.plot(t, u, label="Unit Step Input")
+ax1.plot(t, y, label="System Response")
+ax1.set_xlabel('Time')
+ax1.set_ylabel('Amplitude')
+ax1.set_title('Step Response')
+ax1.legend()
+st.pyplot(fig1)
 
-# 주파수응답 출력
-st.header('Bode Plot')
-fig_bode = plt.figure()
-plot_bode(G_closed_loop)
-st.pyplot(fig_bode)
+# 주파수 응답 보드선도 그리기
+fig2, (ax2_mag, ax2_phase) = plt.subplots(2, 1)
+ax2_mag.semilogx(w, mag)
+ax2_mag.set_xlabel('Frequency [rad/s]')
+ax2_mag.set_ylabel('Magnitude [dB]')
+ax2_mag.set_title('Bode Plot - Magnitude')
+
+ax2_phase.semilogx(w, phase)
+ax2_phase.set_xlabel('Frequency [rad/s]')
+ax2_phase.set_ylabel('Phase [degrees]')
+ax2_phase.set_title('Bode Plot - Phase')
+
+fig2.tight_layout()
+st.pyplot(fig2)
