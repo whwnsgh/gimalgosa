@@ -1,37 +1,47 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import control
+import control as ctl
 import streamlit as st
 
 def main():
-    st.title("폐루프 전달함수 시뮬레이션")
+    st.title("폐루프 전달함수")
 
-    # 전달함수 G(s) 정의
-    G = control.TransferFunction([100], [1, 5, 106])
+    # 전달함수 G1과 G2 정의
+    G1 = ctl.TransferFunction([100], [1])
+    G2 = ctl.TransferFunction([1], [1, 5, 6])
 
-    # 폐루프 전달함수 계산
-    G_closed_loop = control.feedback(G, 1)
-
-    # Unit step 입력 생성
-    t = np.linspace(0, 10, 1000)
-    u = np.heaviside(t, 1)
-
-    # 폐루프 응답 계산
-    t, y = control.step_response(G_closed_loop, T=t)
+    # 폐루프 전달함수 구하기
+    G3 = ctl.feedback(G1 * G2)
 
     # 폐루프 전달함수 출력
-    st.title("폐루프 전달함수")
-    st.latex("G(s) = \\frac{100}{{s^2 + 5s + 106}}")
+    num_str = ctl.tf2str(G3.num[0][0])
+    den_str = ctl.tf2str(G3.den[0][0])
+    G3_str = f"[ {num_str} ] / [ {den_str} ]"
+    st.write("폐루프 전달함수:", G3_str)
 
-    # Unit step 입력의 응답곡선 그리기
-    fig, ax = plt.subplots()
-    ax.plot(t, u, label="Unit Step Input")
-    ax.plot(t, y, label="System Response")
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Amplitude')
-    ax.set_title('Step Response')
-    ax.legend()
-    st.pyplot(fig)
+    # unit step 입력에 대한 응답곡선 그리기
+    t, y = ctl.step_response(G3)
+    plt.figure()
+    plt.plot(t, y)
+    plt.xlabel("Time")
+    plt.ylabel("Response")
+    plt.title("Step Response")
+    st.pyplot(plt)
+
+    # 주파수 응답 보드선도 그리기
+    mag, phase, omega = ctl.bode(G3)
+    plt.figure()
+    plt.subplot(2, 1, 1)
+    plt.semilogx(omega, mag)
+    plt.xlabel("Frequency")
+    plt.ylabel("Magnitude (dB)")
+    plt.title("Bode Plot - Magnitude")
+    plt.subplot(2, 1, 2)
+    plt.semilogx(omega, phase)
+    plt.xlabel("Frequency")
+    plt.ylabel("Phase (degrees)")
+    plt.title("Bode Plot - Phase")
+    st.pyplot(plt)
 
 if __name__ == '__main__':
     main()
