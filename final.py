@@ -12,13 +12,12 @@ def main():
     G1 = ctl.TransferFunction([100], [1])
     G2 = ctl.TransferFunction([1], [1, 5, 6])
 
-     # 폐루프 전달함수 구하기
+      # 폐루프 전달함수 구하기
     G3 = ctl.feedback(G1 * G2)
 
     # 폐루프 전달함수 출력
-    num_str = ctl.pprint(G3.num[0][0])
-    den_str = ctl.pprint(G3.den[0][0])
-    G3_str = f"[ {num_str} ] / [ {den_str} ]"
+    num, den = ctl.tf2ss(G3.num[0][0], G3.den[0][0])
+    G3_str = ctl.ss2str(num, den)
     st.write("폐루프 전달함수:", G3_str)
 
     # unit step 입력에 대한 응답곡선 그리기
