@@ -5,7 +5,8 @@ import streamlit as st
 from scipy import signal
 
 def main():
-    st.title("폐루프 전달함수")
+    st.title("제어공학 기말고사")
+    st.write("202021089 조준호")
 
     # 전달함수 G1과 G2 정의
     G1 = ctl.TransferFunction([100], [1])
