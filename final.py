@@ -28,27 +28,27 @@ def plot_bode(system):
 
 # 전달함수 G(s) 정의
 num = [100]
-den = [1, 5, 6]
+den = [1, 2, 3]
 G = control.TransferFunction(num, den)
 
 # 폐루프 전달함수 구하기
-T = control.feedback(G)
+G_closed_loop = control.feedback(G)
 
 # Streamlit 앱 구성
 st.title('Control System Analysis')
 
-# 전달함수 출력
-st.header('Transfer Function')
-st.latex(r'G(s) = \frac{100}{{(s+2)(s+3)}}')
+# 폐루프 전달함수 출력
+st.header('Closed-loop Transfer Function')
+st.latex(r'G_{\text{closed-loop}}(s) = \frac{100}{{s^2 + 5s + 6}}')
 
 # 단위계단입력의 응답곡선 출력
 st.header('Step Response')
 fig_step = plt.figure()
-plot_step_response(T)
+plot_step_response(G_closed_loop)
 st.pyplot(fig_step)
 
 # 주파수응답 출력
 st.header('Bode Plot')
 fig_bode = plt.figure()
-plot_bode(G)
+plot_bode(G_closed_loop)
 st.pyplot(fig_bode)
