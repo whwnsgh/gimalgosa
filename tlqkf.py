@@ -16,7 +16,7 @@ def main():
 
     # 폐루프 전달함수 출력
     st.title("폐루프 전달함수")
-    st.latex("G(s) = \\frac{100}{{(s+2)(s+3)}}")
+    st.latex("G(s) = \\frac{100}{{(s+}}")
 
     # 폐루프 전달함수의 분자 계수와 분모 계수 출력
     st.text("전달함수의 분자 계수: " + ', '.join(map(str, sys.num)))
