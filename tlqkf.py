@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import control as ctl
 import streamlit as st
+from scipy import signal
 
 def main():
     st.title("폐루프 전달함수")
