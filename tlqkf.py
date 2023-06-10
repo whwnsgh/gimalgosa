@@ -15,7 +15,10 @@ G = G1 * G2
 # G3 = feedback(G, sign=-1, name=None) 함수를 사용하여 피드백 블록 계산
 G3 = ctl.feedback(G, sign=-1)
 
+# 전달함수의 분자와 분모
+num = G3.num[0][0]
+den = G3.den[0][0]
+
 # 전달함수 출력
-num, den = ctl.tfdata(G3)
-G3_str = ctl.tf2str(num, den)
+G3_str = f"{num}/{den}"
 st.write("전달함수:", G3_str)
