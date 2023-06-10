@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import control as ct
+import control as ctl
 import streamlit as st
 
 # 전달함수 G1과 G2 정의
