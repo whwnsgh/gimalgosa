@@ -7,21 +7,17 @@ from scipy import signal
 def main():
     st.title("폐루프 전달함수")
 
-    # 전달함수 계수
-    num_coeffs = [100]
-    denom_coeffs = [1, 5, 106]
+    전달함수 G(s) = 100/((s+2)(s+3))
+    G = ctl.TransferFunction([100], [1, 5, 6])
 
-    # 폐루프 전달함수 생성
-    sys = signal.TransferFunction(num_coeffs, denom_coeffs)
+    # 전달함수를 상태공간 모델로 변환
+    ss = ctl.tf2ss(G)
+
+    # 상태공간 모델을 다시 전달함수로 변환
+    num, den = ctl.ss2tf(ss)
 
     # 폐루프 전달함수 출력
-    st.title("폐루프 전달함수")
-    st.latex("G(s) = \\frac{100}{{(s+}}")
-
-    # 폐루프 전달함수의 분자 계수와 분모 계수 출력
-    st.text("전달함수의 분자 계수: " + ', '.join(map(str, sys.num)))
-    st.text("전달함수의 분모 계수: " + ', '.join(map(str, sys.den)))
-
+    st.write("폐루프 전달함수: ", ctl.TransferFunction(num, den))
     
     # unit step 입력에 대한 응답곡선 그리기
     t, y = ctl.step_response(G3)
