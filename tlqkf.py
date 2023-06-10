@@ -29,14 +29,17 @@ def main():
     plt.title("Step Response")
     st.pyplot(plt)
 
-    # 전달함수 G(s) = 100/(s^2 + 5s + 106)
+      # 전달함수 G(s) = 100/(s^2 + 5s + 106)
     G = ctl.TransferFunction([100], [1, 5, 106])
+
+    # 전달함수를 scipy.signal.lti 객체로 변환
+    G_lti = signal.lti(G.num[0][0], G.den[0])
 
     # 주파수 범위 설정
     frequencies = np.logspace(-2, 2, 500)
 
     # 주파수 응답 계산
-    w, mag, phase = signal.bode(G, frequencies)
+    w, mag, phase = signal.bode(G_lti, frequencies)
 
     # 보드선도 그리기
     fig, (ax1, ax2) = plt.subplots(2, 1)
@@ -53,6 +56,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
 
