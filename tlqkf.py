@@ -9,7 +9,7 @@ def main():
 
     # 전달함수 계수
     num_coeffs = [100]
-    denom_coeffs = [1, 5, 6]
+    denom_coeffs = [1, 5, 106]
 
     # 폐루프 전달함수 생성
     sys = signal.TransferFunction(num_coeffs, denom_coeffs)
