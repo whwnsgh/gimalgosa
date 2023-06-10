@@ -28,21 +28,30 @@ def main():
     plt.title("Step Response")
     st.pyplot(plt)
 
-    # 주파수 응답 보드선도 그리기
-    frequencies=np.logspace(-2,2,500)
-    mag, phase, omega = ctl.bode(G3)
-    plt.figure()
-    plt.subplot(2, 1, 1)
-    plt.semilogx(omega, mag)
-    plt.xlabel("Frequency")
-    plt.ylabel("Magnitude (dB)")
-    plt.title("Bode Plot - Magnitude")
-    plt.subplot(2, 1, 2)
-    plt.semilogx(omega, phase)
-    plt.xlabel("Frequency")
-    plt.ylabel("Phase (degrees)")
-    plt.title("Bode Plot - Phase")
-    st.pyplot(plt)
+    # 전달함수 G(s) = 100/(s^2 + 5s + 106)
+    G = ctl.TransferFunction([100], [1, 5, 106])
+
+    # 주파수 범위 설정
+    frequencies = np.logspace(-2, 2, 500)
+
+    # 주파수 응답 계산
+    w, mag, phase = signal.bode(G, frequencies)
+
+    # 보드선도 그리기
+    fig, (ax1, ax2) = plt.subplots(2, 1)
+    ax1.semilogx(w, mag)
+    ax1.set_ylabel('Magnitude [dB]')
+    ax1.set_title('Bode Plot - Magnitude')
+    ax2.semilogx(w, phase)
+    ax2.set_xlabel('Frequency [Hz]')
+    ax2.set_ylabel('Phase [degrees]')
+    ax2.set_title('Bode Plot - Phase')
+
+    # 그래프 출력
+    st.pyplot(fig)
 
 if __name__ == '__main__':
     main()
+
+
+
