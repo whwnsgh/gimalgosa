@@ -1,30 +1,21 @@
-import control
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy import signal
+import control as ct
 import streamlit as st
+
 # 전달함수 G1과 G2 정의
-G1 = control.TransferFunction([100],[1])
-G2 = control.TransferFunction([1],[1,5,6])
+G1 = ctl.TransferFunction([100], [1])
+G2 = ctl.TransferFunction([1], [1,5,6])
 
-#전체 전달함수
-G3 = control.feedback(G1 * G2)
-st.write(G3)
+# 전달함수 G = G1 * G2 전방향 경로 / 직렬 결합
+G = G1 * G2
 
-#전체 전달함수의 분자와 분모
-num = [100]
-den = [1,5,6]
+# G3 = feedback(G, sign=-1, name=None) 함수를 사용하여 피드백 블록 계산
+G3 = ctl.feedback(G, sign = -1)
 
-#극점과 영점 찾기
-zeros, poles, _ = signal.tf2zpk(num, den)
-#극점과 영점 그래프 그리기
-fig = plt.figure()
-plt.scatter(np.real(poles), np.imag(poles), marker='x', color='red',label='Poles')
-plt.scatter(np.real(zeros), np.imag(zeros), marker='o', color='blue',label='Zeros')
-plt.xlabel('Real Axis')
-plt.ylabel('Imaginary Axis')
-plt.title('Poles and Zeros of H(s) = K/s+K+1')
-plt.legend()
-plt.grid()
-#그래프 출력
-st.pyplot(fig)
+# 전달함수 출력
+st.write("전달함수: ", G3)
+
+# 극점 출력
+poles = ctl.pole(G3)
+st.write("극점: ", poles)
