@@ -5,7 +5,9 @@ from scipy import signal
 import streamlit as st
 
 # 전달함수 G(s) 정의
-G = control.TransferFunction([100], [1, 5, 6])
+num = [100]
+den = [1, 5, 6]
+G = signal.lti(num, den)
 
 # 폐루프 전달함수 구하기
 T = control.feedback(G)
