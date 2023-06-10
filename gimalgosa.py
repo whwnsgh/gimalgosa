@@ -11,7 +11,7 @@ G2 = ctl.TransferFunction([1], [1,5,6])
 G = G1 * G2
 
 # G3 = feedback(G, sign=-1, name=None) 함수를 사용하여 피드백 블록 계산
-G3 = ctl.feedback(G, sign = 1)
+G3 = ctl.feedback(G, sign = -1)
 
 # 전달함수 출력
 st.write("전달함수: ", G3)
