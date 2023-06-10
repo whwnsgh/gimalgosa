@@ -9,7 +9,7 @@ G2 = control.TransferFunction([1],[1,5,6])
 
 #전체 전달함수
 G3 = control.feedback(G1 * G2)
-print(G3)
+st.write(G3)
 
 #전체 전달함수의 분자와 분모
 num = [100]
