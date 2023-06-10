@@ -29,6 +29,7 @@ def main():
     st.pyplot(plt)
 
     # 주파수 응답 보드선도 그리기
+    frequencies=np.logspace(-2,2,500)
     mag, phase, omega = ctl.bode(G3)
     plt.figure()
     plt.subplot(2, 1, 1)
