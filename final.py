@@ -7,10 +7,10 @@ import streamlit as st
 # 전달함수 G(s) 정의
 num = [100]
 den = [1, 5, 6]
-G = signal.lti(num, den)
+G = control.TransferFunction(num, den)
 
 # 폐루프 전달함수 구하기
-T = control.feedback(G)
+T = control.feedback(G, 1)
 
 # unit step 입력에 대한 응답곡선 그리기
 t, y = control.step_response(T)
