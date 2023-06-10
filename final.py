@@ -1,58 +1,43 @@
-import numpy as np
-from scipy import signal
 import streamlit as st
+import numpy as np
 import matplotlib.pyplot as plt
+from scipy import signal
+import control
 
 def main():
-    st.title("전달함수 시뮬레이션")
+    st.title("폐루프 전달함수 시뮬레이션")
 
-    # 폐루프 전달함수 계수
-    num_coeffs = [100]
-    denom_coeffs = [1, 5, 6]  # s^2 + 5s + 6
+    # 전달함수 G1과 G2 정의
+    K = 1
+    G1 = control.TransferFunction([100], [1])
+    G2 = control.TransferFunction([1], [1, 5, 6])
 
-    # 폐루프 전달함수 생성
-    sys = signal.TransferFunction(num_coeffs, denom_coeffs)
+    # 전체 전달함수
+    G3 = control.feedback(G1 * G2)
 
-    # 시간 범위
-    t = np.linspace(0, 10, 1000)
+    # 전체 전달함수의 분자와 분모
+    num = G3.num
+    den = G3.den
 
-    # Unit step 입력 신호 생성
-    u = np.heaviside(t, 1)
+    # 극점과 영점 찾기
+    zeros, poles, _ = signal.tf2zpk(num, den)
 
-    # 시스템 응답 계산
-    t, y, _ = signal.lsim(sys, u, t)
-
-    # 주파수 응답 계산
-    w, mag, phase = signal.bode(sys)
-
-    # 전달함수 출력
+    # 폐루프 전달함수 출력
     st.title("폐루프 전달함수")
-    st.latex("G(s) = \\frac{100}{{s^2 + 5s + 6}}")
+    st.latex(f"G(s) = \\frac{{{num}}}{{{den}}}")
 
-    # Unit step 입력의 응답곡선 그리기
-    fig1, ax1 = plt.subplots()
-    ax1.plot(t, u, label="Unit Step Input")
-    ax1.plot(t, y, label="System Response")
-    ax1.set_xlabel('Time')
-    ax1.set_ylabel('Amplitude')
-    ax1.set_title('Step Response')
-    ax1.legend()
-    st.pyplot(fig1)
+    # 극점과 영점 그래프 그리기
+    fig, ax = plt.subplots()
+    ax.scatter(np.real(poles), np.imag(poles), marker='x', color='red', label='Poles')
+    ax.scatter(np.real(zeros), np.imag(zeros), marker='o', color='blue', label='Zeros')
+    ax.set_xlabel('Real Axis')
+    ax.set_ylabel('Imaginary Axis')
+    ax.set_title('Poles and Zeros')
+    ax.legend()
+    ax.grid()
 
-    # 주파수 응답 보드선도 그리기
-    fig2, (ax2_mag, ax2_phase) = plt.subplots(2, 1)
-    ax2_mag.semilogx(w, mag)
-    ax2_mag.set_xlabel('Frequency [rad/s]')
-    ax2_mag.set_ylabel('Magnitude [dB]')
-    ax2_mag.set_title('Bode Plot - Magnitude')
-
-    ax2_phase.semilogx(w, phase)
-    ax2_phase.set_xlabel('Frequency [rad/s]')
-    ax2_phase.set_ylabel('Phase [degrees]')
-    ax2_phase.set_title('Bode Plot - Phase')
-
-    fig2.tight_layout()
-    st.pyplot(fig2)
+    # 그래프 출력
+    st.pyplot(fig)
 
 if __name__ == '__main__':
     main()
