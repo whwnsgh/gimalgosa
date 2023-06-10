@@ -2,6 +2,7 @@ import control
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
+import streamlit as st
 # 전달함수 G1과 G2 정의
 G1 = control.TransferFunction([100],[1])
 G2 = control.TransferFunction([1],[1,5,6])
@@ -17,7 +18,7 @@ den = [1,5,6]
 #극점과 영점 찾기
 zeros, poles, _ = signal.tf2zpk(num, den)
 #극점과 영점 그래프 그리기
-fig= plt.figure()
+fig = plt.figure()
 plt.scatter(np.real(poles), np.imag(poles), marker='x', color='red',label='Poles')
 plt.scatter(np.real(zeros), np.imag(zeros), marker='o', color='blue',label='Zeros')
 plt.xlabel('Real Axis')
