@@ -7,17 +7,18 @@ from scipy import signal
 def main():
     st.title("폐루프 전달함수")
 
-    #전달함수 G(s) = 100/((s+2)(s+3))
+    # 전달함수 G(s) = 100/((s+2)(s+3))
     G = ctl.TransferFunction([100], [1, 5, 6])
 
     # 전달함수를 상태공간 모델로 변환
     ss = ctl.tf2ss(G)
 
     # 상태공간 모델을 다시 전달함수로 변환
-    num, den = ctl.ss2tf(ss)
+    tf = ctl.ss2tf(ss)
 
     # 폐루프 전달함수 출력
-    st.write("폐루프 전달함수: ", ctl.TransferFunction(num, den))
+    st.write("폐루프 전달함수: ", tf)
+
     
     # unit step 입력에 대한 응답곡선 그리기
     t, y = ctl.step_response(G3)
