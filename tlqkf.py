@@ -7,7 +7,7 @@ from scipy import signal
 def main():
     st.title("폐루프 전달함수")
 
-    전달함수 G(s) = 100/((s+2)(s+3))
+    #전달함수 G(s) = 100/((s+2)(s+3))
     G = ctl.TransferFunction([100], [1, 5, 6])
 
     # 전달함수를 상태공간 모델로 변환
