@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import control as ctl
 import streamlit as st
 
+st.title("202021089 조준호")
+
 # 전달함수 G1과 G2 정의
 G1 = ctl.TransferFunction([100], [1])
 G2 = ctl.TransferFunction([1], [1,5,6])
@@ -16,6 +18,3 @@ G3 = ctl.feedback(G, sign = -1)
 # 전달함수 출력
 st.write("전달함수: ", G3)
 
-# 극점 출력
-poles = ctl.pole(G3)
-st.write("극점: ", poles)
