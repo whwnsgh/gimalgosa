@@ -16,9 +16,7 @@ def main():
     G3 = ctl.feedback(G1 * G2)
 
     # 폐루프 전달함수 출력
-    num_str = np.array2string(G3.num[0][0])
-    den_str = np.array2string(G3.den[0][0])
-    G3_str = f"[ {num_str.strip('[]')} ] / [ {den_str.strip('[]')} ]"
+    G3_str = f"{G3.num[0][0][0]} / ({G3.den[0][0][0]} s^2 + {G3.den[0][0][1]} s + {G3.den[0][0][2]})"
     st.write("폐루프 전달함수:", G3_str)
 
     # unit step 입력에 대한 응답곡선 그리기
